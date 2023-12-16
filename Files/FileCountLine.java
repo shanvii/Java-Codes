@@ -1,6 +1,4 @@
-/*Satakshi Shanvi
- * 23MCA10122
- * Q.3 Write a Java program that counts and prints the number of lines in a text file (e.g., "file.txt"). Make sure to handle file exceptions.
+/* Write a Java program that counts and prints the number of lines in a text file (e.g., "file.txt"). Make sure to handle file exceptions.
  */
 
 //Scanner class imported
