@@ -1,6 +1,4 @@
-/*23MCA10122
- * Satakshi Shanvi
- * Q.2 Build a file search utility that searches for files with a specific extension (e.g., ".txt") within a specified directory. 
+/* Build a file search utility that searches for files with a specific extension (e.g., ".txt") within a specified directory. 
  * List the file names that match the criteria.
  */
 
