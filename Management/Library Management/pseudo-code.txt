@@ -1,0 +1,132 @@
+// Book class
+class Book:
+    private String book_id
+    private String title
+    private String author
+    private String genre
+    private boolean is_checked_out
+
+    method Book(book_id, title, author, genre):
+        this.book_id = book_id
+        this.title = title
+        this.author = author
+        this.genre = genre
+        this.is_checked_out = false
+
+    method get_book_info():
+        return "Title: " + this.title + ", Author: " + this.author + ", Genre: " + this.genre
+
+    method check_out():
+        this.is_checked_out = true
+
+    method return_book():
+        this.is_checked_out = false
+
+// Member class
+class Member:
+    private String member_id
+    private String name
+    private String contact_info
+    private List<Book> checked_out_books
+
+    method Member(member_id, name, contact_info):
+        this.member_id = member_id
+        this.name = name
+        this.contact_info = contact_info
+        this.checked_out_books = []
+
+    method check_out_book(book):
+        if not book.is_checked_out:
+            book.check_out()
+            this.checked_out_books.append(book)
+            return true
+        else:
+            return false
+
+    method return_book(book):
+        if book in this.checked_out_books:
+            book.return_book()
+            this.checked_out_books.remove(book)
+            return true
+        else:
+            return false
+
+// Transaction class
+class Transaction:
+    private String transaction_id
+    private Member member
+    private Book book
+    private Date due_date
+
+    method Transaction(transaction_id, member, book, due_date):
+        this.transaction_id = transaction_id
+        this.member = member
+        this.book = book
+        this.due_date = due_date
+
+    method calculate_fine():
+        // Assume a fine of $1 per day for overdue books
+        overdue_days = (current_date - this.due_date).days
+        if overdue_days > 0:
+            return overdue_days
+        else:
+            return 0
+
+// Library class
+class Library:
+    private String name
+    private List<Book> books
+    private List<Member> members
+    private List<Transaction> transactions
+    private int transaction_counter
+
+    method Library(name):
+        this.name = name
+        this.books = []
+        this.members = []
+        this.transactions = []
+        this.transaction_counter = 1
+
+    method add_book(book):
+        this.books.append(book)
+
+    method add_member(member):
+        this.members.append(member)
+
+    method check_out_book(member_id, book_id):
+        member = find_member_by_id(member_id)
+        book = find_book_by_id(book_id)
+        if member != null and book != null:
+            if member.check_out_book(book):
+                due_date = current_date + 14 // Assume a two-week checkout period
+                transaction = new Transaction(this.transaction_counter, member, book, due_date)
+                this.transactions.append(transaction)
+                this.transaction_counter++
+                return transaction
+        return null
+
+    method return_book(transaction_id):
+        transaction = find_transaction_by_id(transaction_id)
+        if transaction != null:
+            fine = transaction.calculate_fine()
+            return { "transaction": transaction, "fine": fine }
+        return null
+
+// Main class
+class Main:
+    method main():
+        library = new Library("MyLibrary")
+
+        book1 = new Book("B001", "Book1", "Author1", "Genre1")
+        book2 = new Book("B002", "Book2", "Author2", "Genre2")
+
+        member1 = new Member("M001", "Member1", "Contact1")
+        member2 = new Member("M002", "Member2", "Contact2")
+
+        library.add_book(book1)
+        library.add_book(book2)
+        library.add_member(member1)
+        library.add_member(member2)
+
+        library.check_out_book("M001", "B001")
+        library.return_book(1)
