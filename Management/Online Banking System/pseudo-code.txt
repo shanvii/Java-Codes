@@ -1,0 +1,124 @@
+// Account class
+class Account:
+    private String accountId
+    private String accountType
+    private double balance
+    private List<Transaction> transactions
+
+    method Account(accountId, accountType, balance):
+        this.accountId = accountId
+        this.accountType = accountType
+        this.balance = balance
+        this.transactions = new ArrayList<Transaction>()
+
+    method deposit(amount):
+        if amount > 0:
+            // record the deposit transaction
+            transaction = new Transaction("Deposit", amount)
+            transactions.add(transaction)
+            balance += amount
+        else:
+            print "Invalid deposit amount"
+
+    method withdraw(amount):
+        if 0 < amount <= balance:
+            // record the withdrawal transaction
+            transaction = new Transaction("Withdrawal", amount)
+            transactions.add(transaction)
+            balance -= amount
+        else:
+            print "Insufficient funds!"
+
+    method getBalance():
+        return balance
+
+// User class
+class User:
+    private String userId
+    private String username
+    private String password // hashed password
+    private String email
+    private List<Account> accounts
+
+    method User(userId, username, password, email):
+        this.userId = userId
+        this.username = username
+        this.password = hashPassword(password)
+        this.email = email
+        this.accounts = new ArrayList<Account>()
+
+    method hashPassword(password):
+        // Use SHA-256 hashing algorithm
+        // Implementation not provided
+
+    method createAccount(accountType, initialBalance):
+        // create a new account and add it to the user's list of accounts
+        account = new Account(generateAccountId(), accountType, initialBalance)
+        accounts.add(account)
+
+// Transaction class
+class Transaction:
+    private String transactionType
+    private double amount
+    private long timestamp // Unix timestamp in milliseconds
+
+    method Transaction(transactionType, amount):
+        this.transactionType = transactionType
+        this.amount = amount
+        this.timestamp = getCurrentTimestamp()
+
+// Bank class
+class Bank:
+    private String name
+    private Map<String, User> users // map of user IDs to user objects
+
+    method Bank(name):
+        this.name = name
+        this.users = new HashMap<String, User>()
+
+    method createUser(username, password, email):
+        // create a new user and add it to the bank's list of users
+        user = new User(generateUserId(), username, password, email)
+        users.put(user.getUserId(), user)
+        return user
+
+    method generateUserId():
+        // generate a unique user ID
+        // Implementation not provided
+
+    method authenticateUser(username, password):
+        // authenticate the user based on provided credentials
+        for user in users.values():
+            if user.getUsername().equals(username) and user.getPassword().equals(user.hashPassword(password)):
+                return user
+        return null // authentication failed
+
+// Main class
+class Main:
+    method main():
+        // Create an instance of the Bank
+        bank = new Bank("MyBank")
+
+        // Create users and accounts
+        user1 = bank.createUser("user1", "password1", "user1@example.com")
+        user1.createAccount("Savings", 1000.0)
+        user1.createAccount("Checking", 500.0)
+
+        user2 = bank.createUser("user2", "password2", "user2@example.com")
+        user2.createAccount("Savings", 1500.0)
+
+        // Authenticate users
+        authenticatedUser1 = bank.authenticateUser("user1", "password1")
+        authenticatedUser2 = bank.authenticateUser("user2", "password2")
+
+        if authenticatedUser1 != null:
+            print "User 1 authenticated successfully."
+            // Perform banking operations for authenticatedUser1
+        else:
+            print "User 1 authentication failed."
+
+        if authenticatedUser2 != null:
+            print "User 2 authenticated successfully."
+            // Perform banking operations for authenticatedUser2
+        else:
+            print "User 2 authentication failed."
